@@ -5,7 +5,7 @@ x = sp.symbols('x')
 
 def metode_biseksi(function, a, b, tol):
   data = []
-  headers = ["Iterasi", "a", "b", "c", "fc"]
+  headers = ["Iterasi", "a", "b", "c", "fc", "Lebar Interval"]
   f = sp.lambdify(x, function)
   fa = f(a)
   fb = f(b)
@@ -15,25 +15,24 @@ def metode_biseksi(function, a, b, tol):
   
   iterasi = 1
   
-  while abs(b - a) > tol:
-    c = round((a + b)/2, 10)
-    fc = round(f(c), 10)
+  while (b - a)/2 > tol: # pake (b - a) / 2 karena kan kita gatahu secara pasti akar nya ada dimana, nah kita berdiri ditengah, gaperlu kita ngecek dari interval a ke b, lebih baik berdiri di tengah dan memantau dan tangkep akar dari tengah daripada ngecek semua tempat
+    c = (a + b)/2
+    fc = f(c)
     
-    data.append([iterasi, a, b, c, fc])
-    
-    if fc < 0 and fa < 0:
-      fa = fc
-      a = c
-    else:
-      fb = fc
+    data.append([iterasi, a, b, c, fc, (b-a)])
+    if fc == 0:
+      break
+    elif fa * fc < 0:
       b = c
-    
+      fb = fc
+    else:
+      a = c
+      fa = fc
+      
     iterasi += 1
   print(tb.tabulate(data, headers = headers, tablefmt="psql"))
   return f"Nilai c mendekati akar: {c}"
         
-# aa = metode_biseksi(x**3 - x - 1, 1, 2, 0.000001)
+#aa = metode_biseksi(x**3 - x - 1, 1, 2, 0.000001)
 
-# print(aa)
-print(metode_biseksi(x**5 - 2*x + 1, 1, 2, 0.00001))
-print("halo")
+#print(aa)
