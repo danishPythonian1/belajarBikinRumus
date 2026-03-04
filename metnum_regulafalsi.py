@@ -1,42 +1,48 @@
 import sympy as sp
-import tabulate as tb
+from tabulate import tabulate
 
 x = sp.symbols('x')
 
-def metode_regulaFalsi(function, a, b, tol):
-  f = sp.lambdify(x, function)
-  fa = f(a)
-  fb = f(b)
-  
-  if fa * fb >= 0:
-    return "Tidak mengandung akar"
-  c = b - ((fb*(b-a))/(fb-fa))
-  fc = f(c)
-  
-  iterasi = 1
-  
-  headers = ["iterasi", "a", "b", "c", "fc"]
-  data = [[iterasi, a, b, c, fc]]
-  
-  while abs(fc) > tol:
-    if fc < 0 and fa < 0:
-      fa = fc
-      a = c
-    else:
-      fb = fc
-      b = c
-    c = b - ((fb*(b-a))/(fb-fa))
+def metode_regulaFalsi(expression, a, b, tol):
+    f = sp.lambdify(x, expression)
+    fa, fb = f(a), f(b)
+    
+    if fa * fb >= 0:
+        return "Error: Tidak ada perubahan tanda di interval [a, b]. Akar mungkin tidak ada."
+
+    iterasi = 0
+    data = []
+    
+    c = a 
     fc = f(c)
-    
-    iterasi += 1
-    
-    data.append([iterasi, a, b, c, fc])
-  tabelData = tb.tabulate(data, headers = headers, tablefmt="psql")
-  print(tabelData)
-  print(f"Nilai c mendekati akar: {c}")
-  print(f"Nilai fc: {fc}")
-  return ""
+
+    while True:
+        # Rumus Regula Falsi
+        c_lama = c
+        c = b - (fb * (b - a)) / (fb - fa)
+        fc = f(c)
+        iterasi += 1
+        
+        lebar_interval = abs(b - a)
+        data.append([iterasi, f"{a:.6f}", f"{b:.6f}", f"{c:.6f}", f"{fc:.6e}", f"{lebar_interval:.6e}"])
+
+        if abs(fc) < tol or abs(c - c_lama) < tol:
+            break
+
+        if fa * fc < 0:
+            b, fb = c, fc
+        else:
+            a, fa = c, fc
+
+    headers = ["Iterasi", "a", "b", "c", "f(c)", "Lebar Interval"]
+    print(tabulate(data, headers=headers, tablefmt="psql"))
+    print(f"\nAkar ditemukan di x = {c}")
+    print(f"Nilai f(c) = {fc}")
+    return c
+
+# Contoh Penggunaan:
+# metode_regulaFalsi(x**3 - 2*x - 5, 2, 3, 0.0001)
 
 # print(metode_regulaFalsi(x**3 - x, -1, 1, 0.0001))
 
-# print(metode_regulaFalsi(x**2 - 3, 1, 2, 0.000001))
+print(metode_regulaFalsi(x**2 - 3, 1, 2, 0.000001))
