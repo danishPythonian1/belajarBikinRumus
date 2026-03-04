@@ -17,6 +17,7 @@ def metode_regulaFalsi(function, a, b, tol):
   
   headers = ["iterasi", "a", "b", "c", "fc"]
   data = [[iterasi, a, b, c, fc]]
+  
   while abs(fc) > tol:
     if fc < 0 and fa < 0:
       fa = fc
@@ -37,3 +38,5 @@ def metode_regulaFalsi(function, a, b, tol):
   return ""
 
 # print(metode_regulaFalsi(x**3 - x, -1, 1, 0.0001))
+
+# print(metode_regulaFalsi(x**2 - 3, 1, 2, 0.000001))
