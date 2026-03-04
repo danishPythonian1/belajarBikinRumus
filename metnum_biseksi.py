@@ -35,3 +35,4 @@ def metode_biseksi(function, a, b, tol):
 # aa = metode_biseksi(x**3 - x - 1, 1, 2, 0.000001)
 
 # print(aa)
+
