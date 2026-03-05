@@ -26,7 +26,7 @@ int main()
     return 0;
     
   }
-  // int iterasi = 1;
+  // int iterasi = 1;     // ini untuk dibikin fungsi nanti
 
   while ((b - a)/2 > tol){
     double c = (a + b)/2;
