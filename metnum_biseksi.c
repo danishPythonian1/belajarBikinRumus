@@ -3,23 +3,49 @@
 
 int main()
 {
-
-  double x;
-  int a;
-  int b;
-  float tol;
+  // Kamus
+  double x, a, b, tol;
   char *persamaan = "x*x + 2*x - 1";
 
-  // Untuk bikin x agar bisa dibaca komputer
+  // Algoritma
+  a = 0;
+  b = 1;
+  tol = 0.0001;
+  //Ubah x jadi x matematis
   te_variable vars[] = {{"x", &x}};
-
-  // Mengcompile fungsi string menjadi fungsi asli
+  //Mengubah fungsi string menjadi fungsi asli
   te_expr *expr = te_compile(persamaan, vars, 1, 0);
 
-  x = 5;
-  double hasil = te_eval(expr);
-  printf("f(5): %f\n", hasil);
+  x = a;
+  double fa = te_eval(expr);
+  x = b;
+  double fb = te_eval(expr);
 
+  if (fa * fb >= 0){
+    printf("Tidak mengandung akar");
+    return 0;
+    
+  }
+  // int iterasi = 1;
+
+  while ((b - a)/2 > tol){
+    double c = (a + b)/2;
+    x = c;
+    double fc = te_eval(expr);
+
+    if (fc == 0){
+      break;
+    }
+    else if(fc * fa < 0){
+      b = c;
+      fb = fc;
+    } else {
+      a = c;
+      fa = fc;
+    }
+    // iterasi += 1;
+  }
+  printf("Nilai c mendekati akar: %f", (a+b)/2);
   te_free(expr);
   return 0;
 }
